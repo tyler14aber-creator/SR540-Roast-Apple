@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Roast Bench" />
+<meta name="theme-color" content="#2a211b" />
+<title>Roast Bench — SR540 Timer & Recipes</title>
+<style>
+:root{--bg:#f4efe7;--card:#fffaf2;--ink:#2a211b;--muted:#75695f;--accent:#9a4f2d;--accent2:#d79a64;--line:#dfd4c8;--green:#55745b;--shadow:0 10px 28px rgba(63,43,30,.10)}
+*{box-sizing:border-box} body{margin:0;font-family:ui-rounded,"SF Pro Rounded","Avenir Next",system-ui,-apple-system,sans-serif;background:linear-gradient(160deg,#efe5d7,#f8f5ef 55%,#eadaca);color:var(--ink);min-height:100vh}
+.wrap{max-width:1120px;margin:auto;padding:24px}.top{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:18px}.brand h1{margin:0;font-size:clamp(28px,5vw,48px);letter-spacing:-1.5px}.brand p{margin:5px 0 0;color:var(--muted)}
+.grid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}.card{background:rgba(255,250,242,.92);border:1px solid rgba(255,255,255,.7);border-radius:24px;padding:22px;box-shadow:var(--shadow);backdrop-filter:blur(10px)}
+.timer{text-align:center}.dialPanel{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:520px;margin:16px auto 4px}.dialBox{background:#fffdf8;border:1px solid var(--line);border-radius:18px;padding:14px}.dialLabel{font-size:12px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:800}.dialValue{font-size:42px;line-height:1;font-weight:900;margin-top:4px}.nextStep{max-width:520px;margin:8px auto 0;color:var(--muted);font-weight:700;min-height:22px}.clock{font-variant-numeric:tabular-nums;font-size:clamp(64px,12vw,116px);line-height:1;font-weight:800;letter-spacing:-5px;margin:20px 0 8px}.subclock{font-variant-numeric:tabular-nums;color:var(--muted);min-height:25px;font-weight:700}.dev{margin:20px auto 8px;max-width:520px}.devrow{display:flex;justify-content:space-between;font-weight:800}.bar{height:18px;background:#e7ddd2;border-radius:999px;overflow:hidden;margin-top:8px}.bar>div{height:100%;width:0;background:linear-gradient(90deg,var(--accent2),var(--accent));transition:width .2s}
+.controls{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:20px}.btn{border:0;border-radius:16px;padding:16px 14px;font:inherit;font-weight:800;cursor:pointer;background:#e8ded2;color:var(--ink);box-shadow:inset 0 0 0 1px rgba(0,0,0,.03)}.btn:active{transform:translateY(1px)}.primary{background:var(--ink);color:white}.crack{background:var(--accent);color:white}.drop{background:var(--green);color:white}.btn:disabled{opacity:.4;cursor:not-allowed}
+.events{margin-top:18px;text-align:left;border-top:1px solid var(--line);padding-top:14px}.event{display:flex;justify-content:space-between;padding:7px 2px;color:var(--muted)}.event strong{color:var(--ink)}
+h2{margin:0 0 15px;font-size:21px}.field{margin-bottom:12px}.field label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:800;margin-bottom:5px}input,textarea,select{width:100%;border:1px solid var(--line);background:#fffdf8;border-radius:12px;padding:11px 12px;font:inherit;color:var(--ink)}textarea{min-height:75px;resize:vertical}.twocol{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.recipeActions{display:flex;gap:8px}.recipeActions .btn{padding:11px 13px}.recipes{grid-column:1/-1}.recipeGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}.recipe{border:1px solid var(--line);background:#fffdf9;border-radius:17px;padding:15px;cursor:pointer;position:relative}.recipe:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,0,0,.06)}.recipe h3{margin:0 0 5px;font-size:17px}.meta{color:var(--muted);font-size:13px;line-height:1.45}.steps{margin-top:10px;font-size:13px;white-space:pre-wrap}.tag{display:inline-block;background:#efe2d3;color:#75472f;border-radius:999px;padding:4px 8px;font-size:11px;font-weight:800;margin:7px 4px 0 0}.del{position:absolute;right:9px;top:9px;border:0;background:transparent;color:#9d8f84;font-size:18px;cursor:pointer}.small{font-size:12px;color:var(--muted);margin-top:10px}.preset{border-left:4px solid var(--accent2)}
+@media(max-width:760px){.wrap{padding:14px}.grid{grid-template-columns:1fr}.clock{letter-spacing:-3px}.card{padding:17px;border-radius:20px}.top{align-items:start;flex-direction:column}.recipes{grid-column:auto}.twocol{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body><div class="wrap">
+<div class="top"><div class="brand"><h1>Roast Bench</h1><p>FreshRoast SR540 timer, development tracker & dial recipe book.</p></div><div class="small">Recipes save locally in this browser.</div></div>
+<div class="grid">
+<section class="card timer">
+<h2>Live Roast</h2><div id="clock" class="clock">00:00.0</div><div id="subclock" class="subclock">Ready to charge.</div>
+<div class="dialPanel"><div class="dialBox"><div class="dialLabel">Fan</div><div id="fanDial" class="dialValue">—</div></div><div class="dialBox"><div class="dialLabel">Power</div><div id="powerDial" class="dialValue">—</div></div></div><div id="nextStep" class="nextStep">Load a recipe with timed F/P steps.</div>
+<div class="dev"><div class="devrow"><span>Development</span><span id="devPct">—</span></div><div class="bar"><div id="devBar"></div></div></div>
+<div class="controls"><button id="startBtn" class="btn primary">Start Roast</button><button id="fcBtn" class="btn crack" disabled>First Crack</button><button id="dropBtn" class="btn drop" disabled>Drop / Cool</button><button id="resetBtn" class="btn">Reset</button></div>
+<div class="events"><div class="event"><span>Charge / start</span><strong id="startEvent">—</strong></div><div class="event"><span>First crack</span><strong id="fcEvent">—</strong></div><div class="event"><span>Drop</span><strong id="dropEvent">—</strong></div><div class="event"><span>Final development</span><strong id="finalDev">—</strong></div></div>
+</section>
+<section class="card">
+<h2>Dial Recipe</h2>
+<div class="field"><label>Recipe / Coffee</label><input id="name" placeholder="e.g. Costa Rica Tarrazú — Light" /></div>
+<div class="twocol"><div class="field"><label>Charge (g)</label><input id="charge" type="number" placeholder="120" /></div><div class="field"><label>Target FC</label><input id="targetFC" placeholder="7:00" /></div></div>
+<div class="twocol"><div class="field"><label>Target DTR %</label><input id="targetDTR" type="number" step="0.1" placeholder="16" /></div><div class="field"><label>Target Drop</label><input id="targetDrop" placeholder="8:20" /></div></div>
+<div class="field"><label>Fan / Heat steps</label><textarea id="steps" placeholder="0:00 F9 / P2\n2:00 F9 / P4\n4:30 F8 / P6\n..."></textarea></div>
+<div class="field"><label>Notes</label><textarea id="notes" placeholder="Bean movement, color, weather, result..."></textarea></div>
+<div class="recipeActions"><button id="saveBtn" class="btn primary">Save Recipe</button><button id="loadLiveBtn" class="btn">Use Live Times</button></div><div class="small">Tip: tap a saved recipe below to load it back into this form.</div>
+</section>
+<section class="card recipes"><h2>Recipe Book</h2><div id="recipeGrid" class="recipeGrid"></div></section>
+</div></div>
+<script>
+const $=id=>document.getElementById(id); let start=null,fc=null,drop=null,tick=null;
+function fmt(ms){ms=Math.max(0,ms);let t=ms/1000,m=Math.floor(t/60),s=t-m*60;return String(m).padStart(2,'0')+':'+s.toFixed(1).padStart(4,'0')}
+function fmtShort(ms){let t=Math.round(ms/1000),m=Math.floor(t/60),s=t%60;return m+':'+String(s).padStart(2,'0')}
+function parseTime(t){let m=String(t).trim().match(/^(\d+):([0-5]?\d(?:\.\d+)?)$/);return m?(+m[1]*60 + +m[2]):null}
+function parseDialSteps(text){let out=[];String(text||'').split(/\n/).forEach(line=>{let tm=line.match(/(?:^|\s)(\d+:\d+(?:\.\d+)?)(?:\s|$)/);if(!tm)return;let fan=line.match(/(?:\bF(?:AN)?\s*[:=]?\s*)(\d+)/i);let power=line.match(/(?:\b(?:P|H|POWER|HEAT)\s*[:=]?\s*)(\d+)/i);let sec=parseTime(tm[1]);if(sec!=null&&(fan||power))out.push({sec,fan:fan?+fan[1]:null,power:power?+power[1]:null})});return out.sort((a,b)=>a.sec-b.sec)}
+function updateDials(elapsedMs){let steps=parseDialSteps(val('steps')), sec=elapsedMs/1000;if(!steps.length){$('fanDial').textContent=$('powerDial').textContent='—';$('nextStep').textContent='Add steps like “0:00 F9 / P2” to the recipe.';return}let fan=null,power=null,next=null;for(let st of steps){if(st.sec<=sec){if(st.fan!=null)fan=st.fan;if(st.power!=null)power=st.power}else{next=st;break}}$('fanDial').textContent=fan??'—';$('powerDial').textContent=power??'—';if(next){let changes=[];if(next.fan!=null)changes.push('Fan → '+next.fan);if(next.power!=null)changes.push('Power → '+next.power);$('nextStep').textContent='Next: '+changes.join(' / ')+' in '+fmtShort((next.sec-sec)*1000)}else $('nextStep').textContent='No more programmed dial changes.'}
+function update(){if(!start)return;let now=drop||performance.now(), elapsed=now-start;updateDials(elapsed);$('clock').textContent=fmt(elapsed);if(fc){let dev=now-fc,pct=dev/elapsed*100;$('devPct').textContent=pct.toFixed(1)+'%';$('devBar').style.width=Math.min(pct*3,100)+'%';$('subclock').textContent='Development '+fmt(dev)+' since first crack';}else $('subclock').textContent='Roasting — mark first crack when it begins.'}
+$('startBtn').onclick=()=>{if(start)return;start=performance.now();fc=drop=null;$('startEvent').textContent='0:00';$('fcEvent').textContent=$('dropEvent').textContent=$('finalDev').textContent='—';$('fcBtn').disabled=false;$('dropBtn').disabled=false;$('startBtn').disabled=true;tick=setInterval(update,100);update()}
+$('fcBtn').onclick=()=>{if(!start||fc||drop)return;fc=performance.now();$('fcEvent').textContent=fmtShort(fc-start);$('fcBtn').disabled=true;update()}
+$('dropBtn').onclick=()=>{if(!start||drop)return;drop=performance.now();clearInterval(tick);$('dropEvent').textContent=fmtShort(drop-start);if(fc){let pct=(drop-fc)/(drop-start)*100;$('finalDev').textContent=pct.toFixed(1)+'% ('+fmtShort(drop-fc)+')'}$('fcBtn').disabled=true;$('dropBtn').disabled=true;update();$('subclock').textContent='Roast complete.'}
+$('resetBtn').onclick=()=>{clearInterval(tick);start=fc=drop=null;$('clock').textContent='00:00.0';$('subclock').textContent='Ready to charge.';$('devPct').textContent='—';$('devBar').style.width='0';$('fanDial').textContent=$('powerDial').textContent='—';$('nextStep').textContent='Load a recipe with timed F/P steps.';['startEvent','fcEvent','dropEvent','finalDev'].forEach(x=>$(x).textContent='—');$('startBtn').disabled=false;$('fcBtn').disabled=$('dropBtn').disabled=true}
+const defaults=[
+{name:'Costa Rica Tarrazú — Light',charge:'',targetFC:'7:00',targetDTR:'15–17',targetDrop:'',steps:'Reduce early/mid-roast energy enough to move FC toward 7:00.\nDefine FC as 3 quick successive pops.',notes:'Prior FC: 6:15 → 6:19 → 6:37. 18% development tasted/looked darker than desired.',preset:true},
+{name:'Colombia Cauca — Baseline',charge:'110–120',targetFC:'8:30',targetDTR:'18–19',targetDrop:'10:30',steps:'Fan: 9 → 8 → 7\nHeat: 2 → 7\nPrioritize strong bean movement; higher fan early helps avoid scorching.',notes:'Washed Cauca. Outdoor/humid roasting. Goal: light to medium-light, preserve sweetness and acidity.',preset:true},
+{name:'Brazil — Quiet Crack',charge:'125',targetFC:'',targetDTR:'',targetDrop:'',steps:'Use visual/aroma/color cues if audible first crack is faint or absent.',notes:'Beans substantially smaller than the Colombia. Outdoor/humid conditions; historically first crack may be very quiet.',preset:true}
+];
+function getRecipes(){let r=JSON.parse(localStorage.getItem('roastRecipes')||'null');if(!r){r=defaults;localStorage.setItem('roastRecipes',JSON.stringify(r))}return r}
+function saveRecipes(r){localStorage.setItem('roastRecipes',JSON.stringify(r));render()}
+function val(id){return $(id).value.trim()} function load(r){['name','charge','targetFC','targetDTR','targetDrop','steps','notes'].forEach(k=>$(k).value=r[k]||'');if(!start)updateDials(0);scrollTo({top:0,behavior:'smooth'})}
+$('saveBtn').onclick=()=>{if(!val('name')){alert('Give the recipe a name first.');return}let r=getRecipes();r.unshift({name:val('name'),charge:val('charge'),targetFC:val('targetFC'),targetDTR:val('targetDTR'),targetDrop:val('targetDrop'),steps:val('steps'),notes:val('notes'),preset:false});saveRecipes(r)}
+$('loadLiveBtn').onclick=()=>{if(fc)$('targetFC').value=fmtShort(fc-start);if(drop)$('targetDrop').value=fmtShort(drop-start);if(fc&&drop)$('targetDTR').value=((drop-fc)/(drop-start)*100).toFixed(1)}
+function esc(s=''){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function render(){let box=$('recipeGrid'),r=getRecipes();box.innerHTML='';r.forEach((x,i)=>{let d=document.createElement('div');d.className='recipe '+(x.preset?'preset':'');d.innerHTML=`${!x.preset?`<button class="del" title="Delete">×</button>`:''}<h3>${esc(x.name)}</h3><div class="meta">${x.charge?esc(x.charge)+' g charge · ':''}${x.targetFC?'FC '+esc(x.targetFC)+' · ':''}${x.targetDTR?'DTR '+esc(x.targetDTR)+'% · ':''}${x.targetDrop?'Drop '+esc(x.targetDrop):''}</div>${x.steps?`<div class="steps">${esc(x.steps)}</div>`:''}${x.notes?`<span class="tag">notes</span><div class="meta">${esc(x.notes)}</div>`:''}`;d.onclick=e=>{if(e.target.classList.contains('del')){e.stopPropagation();let rr=getRecipes();rr.splice(i,1);saveRecipes(rr)}else load(x)};box.appendChild(d)})}
+$('steps').addEventListener('input',()=>{if(!start)updateDials(0)});render();updateDials(0);
+</script></body></html>
